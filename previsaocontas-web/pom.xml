@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
@@ -18,17 +19,12 @@
 			<url>https://maven.java.net/content/repositories/snapshots/</url>
 		</repository>
 
-		<repository>
-
-			<id>prime-repo</id>
-
-			<name>PrimeFaces Maven Repository</name>
-
-			<url>http://repository.primefaces.org</url>
-
-			<layout>default</layout>
-
-		</repository>
+		<!-- <repository> -->
+		<!-- <id>prime-repo</id> -->
+		<!-- <name>PrimeFaces Maven Repository</name> -->
+		<!-- <url>https://repository.primefaces.org</url> -->
+		<!-- <layout>default</layout> -->
+		<!-- </repository> -->
 
 	</repositories>
 
@@ -53,11 +49,12 @@
 			<version>6.0</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.primefaces.themes</groupId>
-			<artifactId>all-themes</artifactId>
-			<version>1.0.10</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.primefaces.themes</groupId> -->
+<!-- 			<artifactId>all-themes</artifactId> -->
+<!-- 			<version>1.0.9</version> -->
+<!-- 		</dependency> -->
+
 
 		<dependency>
 			<groupId>br.com.previsaocontas</groupId>
