@@ -1,14 +1,22 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" template="template.xhtml" >
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="template.xhtml">
 
-    <ui:define name="conteudo">
-        
-        <p:dialog closable="false" header="Login" resizable="false" draggable="false" modal="false" position="center" visible="#{contaControlador.usuario.login eq null}" widgetVar="dlgLogin">
+	<ui:define name="conteudo">
 
-            <ui:include src="/login-modal.xhtml"/>
+		<p:dialog closable="false" header="Login" resizable="false"
+			draggable="false" modal="true" position="center"
+			visible="#{contaControlador.usuario.login eq null}"
+			widgetVar="dlgLogin">
 
-        </p:dialog>
+			<ui:include src="/login-modal.xhtml" />
+
+		</p:dialog>
 
 
-    </ui:define>
+	</ui:define>
 
 </ui:composition>

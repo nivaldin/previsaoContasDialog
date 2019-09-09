@@ -31,7 +31,6 @@ public abstract class HibernateDAO<E extends Entidade> {
 	@PersistenceContext
 	private EntityManager em;
 
-
 	public E salvar(E entidade) {
 
 		if (!UtilObjeto.isNull(entidade)) {
@@ -53,9 +52,8 @@ public abstract class HibernateDAO<E extends Entidade> {
 	public void remover(final E entidade) {
 
 		if (!UtilObjeto.isNull(entidade)) {
-
-			this.em.remove(this.em.getReference(entidade.getClass(), entidade.getId()));
-
+			//this.em.remove(((Session) em.getDelegate()).getReference(entidade.getClass(), entidade.getId()));
+			this.em.remove(entidade);
 		}
 	}
 
@@ -71,7 +69,7 @@ public abstract class HibernateDAO<E extends Entidade> {
 	}
 
 	public E obter(Long identificador) {
-	    	
+
 		E resultado = null;
 
 		if (!UtilObjeto.isNull(identificador)) {
@@ -79,9 +77,9 @@ public abstract class HibernateDAO<E extends Entidade> {
 			final Class<E> tipo = this.getEntidadeClass();
 
 			resultado = this.em.find(tipo, identificador);
-			
+
 		}
-		
+
 		return resultado;
 	}
 

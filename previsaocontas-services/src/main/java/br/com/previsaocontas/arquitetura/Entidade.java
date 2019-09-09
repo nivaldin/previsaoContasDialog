@@ -23,8 +23,8 @@ public abstract class Entidade implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Transient
-	private String				uuid				= UUID.randomUUID().toString();
-	
+	private String uuid = UUID.randomUUID().toString();
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -37,7 +37,7 @@ public abstract class Entidade implements Serializable {
 
 		this.setData_registro(new Date());
 	}
-	
+
 	/**
 	 * @return the id
 	 */
@@ -46,8 +46,7 @@ public abstract class Entidade implements Serializable {
 	}
 
 	/**
-	 * @param id
-	 *            the id to set
+	 * @param id the id to set
 	 */
 	public void setId(Long id) {
 		this.id = id;
@@ -61,19 +60,17 @@ public abstract class Entidade implements Serializable {
 	}
 
 	/**
-	 * @param data_registro
-	 *            the data_registro to set
+	 * @param data_registro the data_registro to set
 	 */
 	public void setData_registro(Date data_registro) {
 		this.data_registro = data_registro;
 	}
-	
+
 	public String getUuid() {
 
 		return this.uuid;
 	}
-	
-	
+
 	@Transient
 	public void setUuid(final String uuid) {
 
@@ -84,15 +81,15 @@ public abstract class Entidade implements Serializable {
 		this.uuid = uuid;
 	}
 
-
 	@Override
 	public int hashCode() {
 
 		final int PRIMO = 31;
 
-		return UtilObjeto.isNull(this.getId()) ? 0 : new HashCodeBuilder(this.getId() % 2 == 0 ? this.getId().intValue() + 1 : this.getId().intValue(), PRIMO).toHashCode();
+		return UtilObjeto.isNull(this.getId()) ? 0
+				: new HashCodeBuilder(this.getId() % 2 == 0 ? this.getId().intValue() + 1 : this.getId().intValue(),
+						PRIMO).toHashCode();
 	}
-
 
 	@Override
 	public boolean equals(final Object object) {
@@ -102,7 +99,7 @@ public abstract class Entidade implements Serializable {
 			return Boolean.TRUE;
 		}
 
-		if (UtilObjeto.isNull(object) || !( object instanceof Entidade ) || object.getClass() != this.getClass()) {
+		if (UtilObjeto.isNull(object) || !(object instanceof Entidade) || object.getClass() != this.getClass()) {
 
 			return Boolean.FALSE;
 		}
@@ -117,7 +114,5 @@ public abstract class Entidade implements Serializable {
 			return UtilString.isEquals(this.getUuid(), entidade.getUuid());
 		}
 	}
-
-	
 
 }

@@ -70,7 +70,7 @@ public class Conta extends Entidade {
 	@JoinColumn(name = "id_conta")
 	private Conta contaPai;
 	
-	@OneToMany(mappedBy = "contaPai", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "contaPai", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Conta> contasFilhas;
 	
 	@PrePersist

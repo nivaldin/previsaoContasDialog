@@ -17,70 +17,73 @@ import br.com.previsaocontas.model.Usuario;
 @ViewScoped
 public class LoginControler implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private Usuario usuario;
+	private Usuario usuario;
 
-    @ManagedProperty(value = "#{usuarioDAOImpl}")
-    private UsuarioDAOImpl usuarioDAOImpl;
+	@ManagedProperty(value = "#{usuarioDAOImpl}")
+	private UsuarioDAOImpl usuarioDAOImpl;
 
-    public UsuarioDAOImpl getUsuarioDAOImpl() {
-	return usuarioDAOImpl;
-    }
-
-    public void setUsuarioDAOImpl(UsuarioDAOImpl usuarioDAOImpl) {
-	this.usuarioDAOImpl = usuarioDAOImpl;
-    }
-
-    @PostConstruct
-    public void iniciar() {
-	this.setUsuario(new Usuario());
-    }
-
-    public Usuario getUsuario() {
-
-	HttpSession session = SessionBean.getSession();
-
-	if (this.usuario == null && (Usuario) session.getAttribute("usuario") == null) {
-	    this.setUsuario(new Usuario());
+	public UsuarioDAOImpl getUsuarioDAOImpl() {
+		return usuarioDAOImpl;
 	}
 
-	if ((Usuario) session.getAttribute("usuario") != null) {
-	    this.setUsuario((Usuario) session.getAttribute("usuario"));
+	public void setUsuarioDAOImpl(UsuarioDAOImpl usuarioDAOImpl) {
+		this.usuarioDAOImpl = usuarioDAOImpl;
 	}
 
-	return usuario;
-    }
+	@PostConstruct
+	public void iniciar() {
+		this.setUsuario(new Usuario());
+	}
 
-    public void setUsuario(Usuario usuario) {
-	this.usuario = usuario;
-    }
+	public Usuario getUsuario() {
 
-    // validate login
-    public void validaLogin() {
-
-	try {
-	    this.setUsuario(usuarioDAOImpl.buscaUsuario(this.getUsuario().getLogin(), this.getUsuario().getSenha()));
-	    if (this.getUsuario().getId() != null) {
 		HttpSession session = SessionBean.getSession();
-		session.setAttribute("usuario", this.getUsuario());
-	    } else {
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuário ou Senha Inválidos!", null));
-	    }
-	} catch (Exception e) {
-	    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
-	    e.printStackTrace();
+
+		if (this.usuario == null && (Usuario) session.getAttribute("usuario") == null) {
+			this.setUsuario(new Usuario());
+		}
+
+		if ((Usuario) session.getAttribute("usuario") != null) {
+			this.setUsuario((Usuario) session.getAttribute("usuario"));
+		}
+
+		return usuario;
 	}
 
-    }
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 
-    // logout event, invalidate session
-    public String logout() {
-	HttpSession session = SessionBean.getSession();
-	session.invalidate();
-	//session.setAttribute("usuario", null);
-	return "/login.xhtml?faces-redirect=true";
+	// validate login
+	public void validaLogin() {
 
-    }
+		try {
+			this.setUsuario(usuarioDAOImpl.buscaUsuario(this.getUsuario().getLogin(), this.getUsuario().getSenha()));
+			if (this.getUsuario().getId() != null) {
+				HttpSession session = SessionBean.getSession();
+				session.setAttribute("usuario", this.getUsuario());
+			} else {
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuário ou Senha Inválidos!", null));
+				System.out.println("Usuário ou Senha Inválidos!");
+			}
+		} catch (Exception e) {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+			e.printStackTrace();
+		}
+
+	}
+
+	// logout event, invalidate session
+	public String logout() {
+		HttpSession session = SessionBean.getSession();
+		session.invalidate();
+		// session.setAttribute("usuario", null);
+		return "/login.xhtml?faces-redirect=true";
+
+	}
 
 }

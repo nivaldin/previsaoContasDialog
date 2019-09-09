@@ -3,6 +3,9 @@ package br.com.previsaocontas.dao;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -18,89 +21,101 @@ import br.com.previsaocontas.utilitarios.UtilObjeto;
 @Repository
 public class ContaDAOImpl extends HibernateDAO<Conta> {
 
-    private Criteria restrictionUsuario(Criteria criteria, Usuario usuario) {
-	criteria.add(Restrictions.eq("usuario", usuario));
-	return criteria;
-    }
-    
-    public Long obterProximo(Usuario usuario) {
-
-	Criteria criteria = this.novoCriteria();
-
-	criteria.setProjection(Projections.max("numr_agrupador"));
-	criteria = this.restrictionUsuario(criteria, usuario);
-
-	Long codigo = (Long) criteria.uniqueResult();
-
-	if (UtilObjeto.isNull(codigo)) {
-
-	    codigo = 0L;
+	private Criteria restrictionUsuario(Criteria criteria, Usuario usuario) {
+		criteria.add(Restrictions.eq("usuario", usuario));
+		return criteria;
 	}
 
-	return codigo + 1;
-    }
+	public Long obterProximo(Usuario usuario) {
 
-    @SuppressWarnings("unchecked")
-    public List<Conta> buscaContaMes(Integer mesSelecionado, Integer anoSelecionado, Usuario usuario) {
+		Criteria criteria = this.novoCriteria();
 
-	Criteria criteria = this.novoCriteria();
+		criteria.setProjection(Projections.max("numr_agrupador"));
+		criteria = this.restrictionUsuario(criteria, usuario);
 
-	Calendar dataI = Calendar.getInstance();
-	Calendar dataF = Calendar.getInstance();
+		Long codigo = (Long) criteria.uniqueResult();
 
-	dataI.set(anoSelecionado, mesSelecionado - 1, 1, 0, 0, 0);
-	dataF.set(anoSelecionado, mesSelecionado - 1, 1, 23, 59, 59);
+		if (UtilObjeto.isNull(codigo)) {
 
-	dataF.add(Calendar.MONTH, 1);
-	dataF.add(Calendar.DAY_OF_MONTH, -1);
+			codigo = 0L;
+		}
 
-	criteria = this.restrictionUsuario(criteria, usuario);
-	criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		return codigo + 1;
+	}
 
-	criteria.add(Restrictions.isNull("contaPai"));
-	
-	criteria.add(Restrictions.ge("data_mes", dataI.getTime()));
-	criteria.add(Restrictions.le("data_mes", dataF.getTime()));
+	@SuppressWarnings("unchecked")
+	public List<Conta> buscaContaMes(Integer mesSelecionado, Integer anoSelecionado, Usuario usuario) {
 
-	criteria.addOrder(Order.asc("tipo"));
-	criteria.addOrder(Order.asc("flag_comum"));
-	criteria.addOrder(Order.desc("data_registro"));
+		Calendar dataI = Calendar.getInstance();
+		Calendar dataF = Calendar.getInstance();
 
-	return criteria.list();
-    }
+		dataI.set(anoSelecionado, mesSelecionado - 1, 1, 0, 0, 0);
+		dataF.set(anoSelecionado, mesSelecionado - 1, 1, 23, 59, 59);
 
-    @SuppressWarnings("unchecked")
-    public List<Conta> buscaContasAcumuladoAberto(Integer mesSelecionado, Integer anoSelecionado, Usuario usuario) {
+		dataF.add(Calendar.MONTH, 1);
+		dataF.add(Calendar.DAY_OF_MONTH, -1);
+		
+//		CriteriaBuilder builder = em.getCriteriaBuilder();
+//	    javax.persistence.criteria.CriteriaQuery<Conta> criteriaQuery = builder.createQuery(Conta.class);
+//	    Root<Conta> r = criteriaQuery.from(Conta.class);
+//	    criteriaQuery.distinct(true);
+//		criteriaQuery.where(builder.isNull(r.get("contaPai")), builder.between(r.get("data_mes"), dataI.getTime(), dataF.getTime()));
+//	    criteriaQuery.orderBy(builder.asc(r.get("tipo")));
+//	    criteriaQuery.orderBy(builder.asc(r.get("flag_comum")));
+//	    criteriaQuery.orderBy(builder.desc(r.get("data_registro")));
+//	    
+//	    List<Conta> results = em.createQuery(criteriaQuery).getResultList();
+//	    System.out.println(results);
+	    
+		Criteria criteria = this.novoCriteria();
 
-	Criteria criteria = this.novoCriteria();
+		criteria = this.restrictionUsuario(criteria, usuario);
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
-	Calendar dataF = Calendar.getInstance();
-	dataF.set(anoSelecionado, mesSelecionado - 1, 1, 0, 0, 0);
+		criteria.add(Restrictions.isNull("contaPai"));
 
-	dataF.add(Calendar.MONTH, 1);
-	dataF.add(Calendar.DAY_OF_MONTH, -1);
+		criteria.add(Restrictions.ge("data_mes", dataI.getTime()));
+		criteria.add(Restrictions.le("data_mes", dataF.getTime()));
 
-	criteria = this.restrictionUsuario(criteria, usuario);
-	criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-	
-	criteria.add(Restrictions.isNull("contaPai"));
+		criteria.addOrder(Order.asc("tipo"));
+		criteria.addOrder(Order.asc("flag_comum"));
+		criteria.addOrder(Order.desc("data_registro"));
 
-	criteria.add(Restrictions.le("data_mes", dataF.getTime()));
-	criteria.add(Restrictions.eq("status", EnumStatusConta.A));
+		return criteria.list();
+	}
 
-	return criteria.list();
+	@SuppressWarnings("unchecked")
+	public List<Conta> buscaContasAcumuladoAberto(Integer mesSelecionado, Integer anoSelecionado, Usuario usuario) {
 
-    }
+		Criteria criteria = this.novoCriteria();
 
-    @SuppressWarnings("unchecked")
-    public List<Conta> buscaContasAgrupador(Long numr_agrupador, Usuario usuario) {
-	Criteria criteria = this.novoCriteria();
+		Calendar dataF = Calendar.getInstance();
+		dataF.set(anoSelecionado, mesSelecionado - 1, 1, 0, 0, 0);
 
-	criteria = this.restrictionUsuario(criteria, usuario);
+		dataF.add(Calendar.MONTH, 1);
+		dataF.add(Calendar.DAY_OF_MONTH, -1);
 
-	criteria.add(Restrictions.eq("numr_agrupador", numr_agrupador));
+		criteria = this.restrictionUsuario(criteria, usuario);
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
-	return criteria.list();
-    }
+		criteria.add(Restrictions.isNull("contaPai"));
+
+		criteria.add(Restrictions.le("data_mes", dataF.getTime()));
+		criteria.add(Restrictions.eq("status", EnumStatusConta.A));
+
+		return criteria.list();
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Conta> buscaContasAgrupador(Long numr_agrupador, Usuario usuario) {
+		Criteria criteria = this.novoCriteria();
+
+		criteria = this.restrictionUsuario(criteria, usuario);
+
+		criteria.add(Restrictions.eq("numr_agrupador", numr_agrupador));
+
+		return criteria.list();
+	}
 
 }
