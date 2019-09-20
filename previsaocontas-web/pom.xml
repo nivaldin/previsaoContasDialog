@@ -19,12 +19,12 @@
 			<url>https://maven.java.net/content/repositories/snapshots/</url>
 		</repository>
 
-		<!-- <repository> -->
-		<!-- <id>prime-repo</id> -->
-		<!-- <name>PrimeFaces Maven Repository</name> -->
-		<!-- <url>https://repository.primefaces.org</url> -->
-		<!-- <layout>default</layout> -->
-		<!-- </repository> -->
+		<repository>
+			<id>prime-repo</id>
+			<name>PrimeFaces Maven Repository</name>
+			<url>https://repository.primefaces.org</url>
+			<layout>default</layout>
+		</repository>
 
 	</repositories>
 
@@ -46,15 +46,14 @@
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
-			<version>6.0</version>
+			<version>7.0</version>
 		</dependency>
 
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.primefaces.themes</groupId> -->
-<!-- 			<artifactId>all-themes</artifactId> -->
-<!-- 			<version>1.0.9</version> -->
-<!-- 		</dependency> -->
-
+		<dependency>
+			<groupId>org.primefaces.themes</groupId>
+			<artifactId>all-themes</artifactId>
+			<version>1.0.10</version>
+		</dependency>
 
 		<dependency>
 			<groupId>br.com.previsaocontas</groupId>
