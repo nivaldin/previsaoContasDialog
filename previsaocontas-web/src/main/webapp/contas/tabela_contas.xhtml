@@ -1,5 +1,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
-
+<p:panelGrid columns="1">
+	<p:commandLink value="Incluir" action="#{contaControlador.preparaInclusao()}" ajax="true"
+				   oncomplete="PF('dlgIncluir').show()" update="dlgIncluir"/>
 	<p:dataTable style="width: 680px" rowStyleClass="#{contaControlador.contaStyleClass(entidade)}" id="tabelaContas" var="entidade" value="#{contaControlador.contas}" >
 
 		<p:column headerText="Opc" width="40">
@@ -72,6 +74,10 @@
 		</p:column>
 
 	</p:dataTable>
-	
-	
+	<p:panelGrid columns="2" style="width: 80%">
+		<p:pieChart model="#{contaControlador.modelChart}" style="width: auto; height: 100px;"/>
+		<p:pieChart model="#{contaControlador.modelChartAcumulado}" style="width: auto; height: 100px;"/>
+	</p:panelGrid>
+
+</p:panelGrid>
 </ui:composition>

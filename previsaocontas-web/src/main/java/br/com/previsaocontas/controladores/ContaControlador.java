@@ -1,21 +1,5 @@
 package br.com.previsaocontas.controladores;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
-
 import br.com.previsaocontas.enums.EnumSimNao;
 import br.com.previsaocontas.enums.EnumStatusConta;
 import br.com.previsaocontas.enums.EnumTipoConta;
@@ -26,6 +10,18 @@ import br.com.previsaocontas.services.ContaServiceImpl;
 import br.com.previsaocontas.services.UsuarioServiceImpl;
 import br.com.previsaocontas.utilitarios.UtilNumero;
 import br.com.previsaocontas.utilitarios.UtilObjeto;
+import org.primefaces.model.charts.ChartData;
+import org.primefaces.model.charts.pie.PieChartDataSet;
+import org.primefaces.model.charts.pie.PieChartModel;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
+import java.io.Serializable;
+import java.util.*;
 
 @ManagedBean
 @SessionScoped
@@ -71,6 +67,9 @@ public class ContaControlador implements Serializable {
 
 	private Integer indexTabMes = 0;
 
+	private PieChartModel modelChart = new PieChartModel();
+	private PieChartModel modelChartAcumulado = new PieChartModel();
+
 	public Conta getContaFilha() {
 		return contaFilha;
 	}
@@ -93,6 +92,55 @@ public class ContaControlador implements Serializable {
 
 	public void setUsuarioServiceImpl(UsuarioServiceImpl usuarioServiceImpl) {
 		this.usuarioServiceImpl = usuarioServiceImpl;
+	}
+
+	private void dadosChartAcumulado() {
+		PieChartModel pieModel = new PieChartModel();
+		ChartData data = new ChartData();
+
+		PieChartDataSet dataSet = new PieChartDataSet();
+		List<Number> values = new ArrayList<>();
+		values.add(totalDespesaPrevistoAcumulado);
+		values.add(totalReceitaPrevistoAcumulado);
+		dataSet.setData(values);
+
+		List<String> bgColors = new ArrayList<>();
+		bgColors.add("red");
+		bgColors.add("green");
+		dataSet.setBackgroundColor(bgColors);
+
+		data.addChartDataSet(dataSet);
+		List<String> labels = new ArrayList<>();
+		labels.add("Despesa Acum.");
+		labels.add("Receita Acum.");
+		data.setLabels(labels);
+
+		pieModel.setData(data);
+		setModelChartAcumulado(pieModel);
+	}
+	private void dadosChartMes() {
+		PieChartModel pieModel = new PieChartModel();
+		ChartData data = new ChartData();
+
+		PieChartDataSet dataSet = new PieChartDataSet();
+		List<Number> values = new ArrayList<>();
+		values.add(totalDespesaMes);
+		values.add(totalReceitaMes);
+		dataSet.setData(values);
+
+		List<String> bgColors = new ArrayList<>();
+		bgColors.add("red");
+		bgColors.add("green");
+		dataSet.setBackgroundColor(bgColors);
+
+		data.addChartDataSet(dataSet);
+		List<String> labels = new ArrayList<>();
+		labels.add("Despesa Mês");
+		labels.add("Receita Mês");
+		data.setLabels(labels);
+
+		pieModel.setData(data);
+		modelChart = pieModel;
 	}
 
 	public List<Conta> getContasDespesa() {
@@ -397,9 +445,7 @@ public class ContaControlador implements Serializable {
 					this.totalReceitaPrevistoMes += conta.getValor() - UtilNumero.round(totalParciais, 2);
 
 				}
-
 			}
-
 		}
 
 		List<Conta> contas = contaServiceImpl.buscaContasAcumuladoAberto(mesSelecionado, anoSelecionado,
@@ -430,7 +476,8 @@ public class ContaControlador implements Serializable {
 
 			}
 		}
-
+		this.dadosChartMes();
+		this.dadosChartAcumulado();
 	}
 
 	public void baixarContaFilha() {
@@ -891,4 +938,19 @@ public class ContaControlador implements Serializable {
 		}
 	}
 
+	public PieChartModel getModelChart() {
+		return modelChart;
+	}
+
+	public void setModelChart(PieChartModel modelChart) {
+		this.modelChart = modelChart;
+	}
+
+	public PieChartModel getModelChartAcumulado() {
+		return modelChartAcumulado;
+	}
+
+	public void setModelChartAcumulado(PieChartModel modelChartAcumulado) {
+		this.modelChartAcumulado = modelChartAcumulado;
+	}
 }

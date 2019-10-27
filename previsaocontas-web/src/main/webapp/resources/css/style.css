@@ -1,6 +1,6 @@
 * {
-  font-family: calibri !important;
-  font-size: 17px !important;
+  font-family: calibri;
+  font-size: 17px;
 }
 
 .ui-tabmenu {
@@ -63,8 +63,12 @@ body {
 
 table thead th, tbody td, tfoot td {
 	border-color: lightgray !important;
+	border-style: none !important;
 }
-
+table thead th {
+	background: none !important;
+	font-weight: bold !important;
+}
 .rowDespesa {
 	color: red!important;
 }

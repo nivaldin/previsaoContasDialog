@@ -163,15 +163,17 @@
 		</p:confirmDialog>
 	</h:form>
 
-
-
 	<div>
-
-		<ui:insert name="conteudo" />
+		<p:panelGrid columns="2">
+			<p:column>
+				<ui:insert name="menu"/>
+			</p:column>
+			<p:column>
+				<ui:insert name="conteudo"/>
+			</p:column>
+		</p:panelGrid>
 
 	</div>
-
-
 
 </h:body>
 
